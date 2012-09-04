@@ -1,5 +1,4 @@
 #include "fimage.h"
-#include <QColor>
 
 FImage::FImage()
 {

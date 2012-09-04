@@ -6,7 +6,7 @@
 
 QT       += core gui opengl
 
-TARGET = imagesubtraction
+TARGET = diffimages
 TEMPLATE = app
 
 
@@ -24,3 +24,9 @@ HEADERS  += mainwindow.h \
 FORMS += \
     openimagesdialog.ui \
     mainwindow.ui
+
+RC_FILE = icon.rc
+ICON = icon.xpm
+
+RESOURCES += \
+    files.qrc

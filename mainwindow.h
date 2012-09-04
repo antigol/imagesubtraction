@@ -2,8 +2,11 @@
 #define MAINWINDOW_H
 
 #include "fimage.h"
+#include "glview.h"
+
 #include <QtGui/QMainWindow>
 #include <QLabel>
+#include <QTabWidget>
 #include <QSettings>
 
 namespace Ui {
@@ -27,9 +30,12 @@ private slots:
     void saveSlot();
 
 private:
-    QSettings _set;
     Ui::MainWindow *ui;
+    QSettings _set;
+
+    QTabWidget *_tabWidget;
     QLabel *_label;
+    GLView *_glview;
 
     FImage _foreground;
     FImage _background;

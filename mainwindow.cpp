@@ -7,23 +7,37 @@
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QSplitter>
+#include <QScrollArea>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
-      ui(new Ui::MainWindow)
+      ui(new Ui::MainWindow),
+      _set("tp-ph-epfl", "diffimages")
 {
     ui->setupUi(this);
 
     _label = new QLabel(this);
     _label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    setCentralWidget(_label);
 
-    ui->radioButton->setChecked(_set.value("radio1").toBool());
-    ui->radioButton_2->setChecked(!_set.value("radio1").toBool());
-    ui->bfDoubleSpinBox->setValue(_set.value("bf").toDouble());
-    ui->sgFilterCheckBox->setChecked(_set.value("sg").toBool());
-    ui->minValueDoubleSpinBox->setValue(_set.value("min").toDouble());
-    ui->maxValueDoubleSpinBox->setValue(_set.value("max").toDouble());
+    QScrollArea *scrollArea = new QScrollArea(this);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setBackgroundRole(QPalette::Dark);
+    scrollArea->setWidget(_label);
+
+    _glview = new GLView(this);
+
+    _tabWidget = new QTabWidget(this);
+    _tabWidget->insertTab(0, scrollArea, "flat");
+    _tabWidget->insertTab(1, _glview, "relief");
+    setCentralWidget(_tabWidget);
+
+    ui->radioButton->setChecked(_set.value("radio1", true).toBool());
+    ui->radioButton_2->setChecked(!_set.value("radio1", true).toBool());
+    ui->bfDoubleSpinBox->setValue(_set.value("bf", 1.0).toDouble());
+    ui->sgFilterCheckBox->setChecked(_set.value("sg", false).toBool());
+    ui->minValueDoubleSpinBox->setValue(_set.value("min", 0.0).toDouble());
+    ui->maxValueDoubleSpinBox->setValue(_set.value("max", 1.0).toDouble());
 
     connect(ui->actionOpen_images, SIGNAL(triggered()), this, SLOT(openSlot()));
     connect(ui->actionCapture, SIGNAL(triggered()), this, SLOT(saveSlot()));
