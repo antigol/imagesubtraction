@@ -32,6 +32,7 @@ private slots:
     void saveSlot();
 
 private:
+    void loadImages(const QString &foreground, const QString &background);
     void setupUI();
     void loadSettings();
     void makeConnexions();

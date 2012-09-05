@@ -20,12 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     makeConnexions();
 
     if (_set.contains("foregroundfilepath") && _set.contains("backgroundfilepath")) {
-        QImage image;
-        image.load(_set.value("foregroundfilepath").toString());
-        _foreground = FImage(image);
-        image.load(_set.value("backgroundfilepath").toString());
-        _background = FImage(image);
-
+        loadImages(_set.value("foregroundfilepath").toString(), _set.value("backgroundfilepath").toString());
         updateAll();
     }
 }
@@ -96,14 +91,7 @@ void MainWindow::openSlot()
 {
     OpenImagesDialog dialog;
     if (dialog.exec()) {
-        QImage image;
-        if (!image.load(dialog.foregroundFilepath()))
-            QMessageBox::critical(this, "QImage::load", "Cannot load foreground");
-        _foreground = FImage(image);
-        if (!image.load(dialog.backgroundFilepath()))
-            QMessageBox::critical(this, "QImage::load", "Cannot load background");
-        _background = FImage(image);
-
+        loadImages(dialog.foregroundFilepath(), dialog.backgroundFilepath());
         updateAll();
     }
 }
@@ -118,6 +106,20 @@ void MainWindow::saveSlot()
         else
             _glview->grabFrameBuffer().save(filepath);
     }
+}
+
+void MainWindow::loadImages(const QString &foreground, const QString &background)
+{
+    QImage image;
+    if (!image.load(foreground))
+        QMessageBox::critical(this, "QImage::load", "Cannot load foreground : " + foreground);
+    _foreground = FImage(image);
+    ui->label_foreground->setPixmap(QPixmap::fromImage(image.scaledToWidth(150)));
+
+    if (!image.load(background))
+        QMessageBox::critical(this, "QImage::load", "Cannot load background : " + background);
+    _background = FImage(image);
+    ui->label_background->setPixmap(QPixmap::fromImage(image.scaledToWidth(150)));
 }
 
 void MainWindow::setupUI()

@@ -6,7 +6,7 @@
 #define MyAppPublisher "epfl"
 #define MyAppExeName "diffimages.exe"
 
-#define BuildDir "C:\Users\Staff\Documents\imagesubtraction-build-desktop-Qt_4_8_1_for_Desktop_-_MinGW__Qt_SDK__Debug"
+#define BuildDir "C:\Users\Staff\Documents\imagesubtraction-build-desktop-Qt_4_8_0_for_Desktop_-_MinGW__Qt_SDK__Release\release"
 
 
 [Setup]
@@ -35,11 +35,11 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "{#BuildDir}\diffimages.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "align_image_stack.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#BuildDir}\libgcc_s_dw2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#BuildDir}\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#BuildDir}\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#BuildDir}\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#BuildDir}\QtOpenGL4.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildDir}\*.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#BuildDir}\mingwm10.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#BuildDir}\QtCore4.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#BuildDir}\QtGui4.dll"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "{#BuildDir}\QtOpenGL4.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#BuildDir}\imageformats\*.dll"; DestDir: "{app}\imageformats"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
