@@ -40,6 +40,11 @@ MainWindow::~MainWindow()
     _set.setValue("zscale", ui->zScaleDoubleSpinBox->value());
 }
 
+void MainWindow::clickedOnImg(int x, int y)
+{
+    ui->bfDoubleSpinBox->setValue(_foreground.pixel(x, y) / _background.pixel(x, y));
+}
+
 void MainWindow::updateAll()
 {
     if (_foreground.width * _foreground.height * _background.width * _background.height == 0) {
@@ -78,7 +83,7 @@ void MainWindow::updateIMG()
     }
 
     _image = _sgFilterResult.render(ui->minValueDoubleSpinBox->value(), ui->maxValueDoubleSpinBox->value());
-    _label->setPixmap(QPixmap::fromImage(_image));
+    _imgview->setPixmap(QPixmap::fromImage(_image));
 
     _glview->setMinMax(ui->minValueDoubleSpinBox->value(), ui->maxValueDoubleSpinBox->value());
     _glview->setZScale(ui->zScaleDoubleSpinBox->value());
@@ -119,13 +124,13 @@ void MainWindow::setupUI()
 {
     ui->setupUi(this);
 
-    _label = new QLabel(this);
-    _label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    _imgview = new IMGView(this);
+    _imgview->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
     QScrollArea *scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollArea->setBackgroundRole(QPalette::Dark);
-    scrollArea->setWidget(_label);
+    scrollArea->setWidget(_imgview);
 
     _glview = new GLView(this);
 
@@ -152,6 +157,7 @@ void MainWindow::makeConnexions()
     connect(ui->actionOpen_images, SIGNAL(triggered()), this, SLOT(openSlot()));
     connect(ui->actionCapture, SIGNAL(triggered()), this, SLOT(saveSlot()));
 
+    connect(_imgview, SIGNAL(clickOnPixmap(int,int)), this, SLOT(clickedOnImg(int,int)));
     connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(updateAll()));
     connect(ui->radioButton_2, SIGNAL(clicked()), this, SLOT(updateAll()));
     connect(ui->bfDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateAll()));

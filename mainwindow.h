@@ -2,10 +2,10 @@
 #define MAINWINDOW_H
 
 #include "fimage.h"
+#include "imgview.h"
 #include "glview.h"
 
 #include <QtGui/QMainWindow>
-#include <QLabel>
 #include <QTabWidget>
 #include <QSettings>
 
@@ -22,6 +22,8 @@ public:
     ~MainWindow();
 
 private slots:
+    void clickedOnImg(int x, int y);
+
     void updateAll();
     void updateSG();
     void updateIMG();
@@ -39,7 +41,7 @@ private:
     QSettings _set;
 
     QTabWidget *_tabWidget;
-    QLabel *_label;
+    IMGView *_imgview;
     GLView *_glview;
 
     FImage _foreground;

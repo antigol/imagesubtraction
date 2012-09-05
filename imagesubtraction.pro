@@ -14,12 +14,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     fimage.cpp \
     glview.cpp \
-    openimagesdialog.cpp
+    openimagesdialog.cpp \
+    imgview.cpp
 
 HEADERS  += mainwindow.h \
     fimage.h \
     glview.h \
-    openimagesdialog.h
+    openimagesdialog.h \
+    imgview.h
 
 FORMS += \
     openimagesdialog.ui \
