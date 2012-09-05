@@ -1,6 +1,7 @@
 #include "fimage.h"
 
 FImage::FImage()
+    : width(0), height(0)
 {
 }
 

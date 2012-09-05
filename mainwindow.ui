@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
-    <height>290</height>
+    <width>716</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,8 +25,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>399</width>
-     <height>21</height>
+     <width>716</width>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -86,7 +86,7 @@
        <item row="0" column="1">
         <widget class="QDoubleSpinBox" name="bfDoubleSpinBox">
          <property name="singleStep">
-          <double>0.100000000000000</double>
+          <double>0.010000000000000</double>
          </property>
          <property name="value">
           <double>1.000000000000000</double>
@@ -142,6 +142,36 @@
           <double>1.000000000000000</double>
          </property>
         </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="zScaleLabel">
+         <property name="text">
+          <string>z scale</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QDoubleSpinBox" name="zScaleDoubleSpinBox">
+         <property name="singleStep">
+          <double>0.010000000000000</double>
+         </property>
+         <property name="value">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </item>

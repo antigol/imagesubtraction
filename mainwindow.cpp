@@ -15,39 +15,9 @@ MainWindow::MainWindow(QWidget *parent)
       ui(new Ui::MainWindow),
       _set("tp-ph-epfl", "diffimages")
 {
-    ui->setupUi(this);
-
-    _label = new QLabel(this);
-    _label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-
-    QScrollArea *scrollArea = new QScrollArea(this);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setBackgroundRole(QPalette::Dark);
-    scrollArea->setWidget(_label);
-
-    _glview = new GLView(this);
-
-    _tabWidget = new QTabWidget(this);
-    _tabWidget->insertTab(0, scrollArea, "flat");
-    _tabWidget->insertTab(1, _glview, "relief");
-    setCentralWidget(_tabWidget);
-
-    ui->radioButton->setChecked(_set.value("radio1", true).toBool());
-    ui->radioButton_2->setChecked(!_set.value("radio1", true).toBool());
-    ui->bfDoubleSpinBox->setValue(_set.value("bf", 1.0).toDouble());
-    ui->sgFilterCheckBox->setChecked(_set.value("sg", false).toBool());
-    ui->minValueDoubleSpinBox->setValue(_set.value("min", 0.0).toDouble());
-    ui->maxValueDoubleSpinBox->setValue(_set.value("max", 1.0).toDouble());
-
-    connect(ui->actionOpen_images, SIGNAL(triggered()), this, SLOT(openSlot()));
-    connect(ui->actionCapture, SIGNAL(triggered()), this, SLOT(saveSlot()));
-
-    connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(updateAll()));
-    connect(ui->radioButton_2, SIGNAL(clicked()), this, SLOT(updateAll()));
-    connect(ui->bfDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateAll()));
-    connect(ui->sgFilterCheckBox, SIGNAL(clicked()), this, SLOT(updateSG()));
-    connect(ui->minValueDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateIMG()));
-    connect(ui->maxValueDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateIMG()));
+    setupUI();
+    loadSettings();
+    makeConnexions();
 
     if (_set.contains("foregroundfilepath") && _set.contains("backgroundfilepath")) {
         QImage image;
@@ -67,6 +37,7 @@ MainWindow::~MainWindow()
     _set.setValue("sg", ui->sgFilterCheckBox->isChecked());
     _set.setValue("min", ui->minValueDoubleSpinBox->value());
     _set.setValue("max", ui->maxValueDoubleSpinBox->value());
+    _set.setValue("zscale", ui->zScaleDoubleSpinBox->value());
 }
 
 void MainWindow::updateAll()
@@ -109,6 +80,10 @@ void MainWindow::updateIMG()
     _image = _sgFilterResult.render(ui->minValueDoubleSpinBox->value(), ui->maxValueDoubleSpinBox->value());
     _label->setPixmap(QPixmap::fromImage(_image));
 
+    _glview->setMinMax(ui->minValueDoubleSpinBox->value(), ui->maxValueDoubleSpinBox->value());
+    _glview->setZScale(ui->zScaleDoubleSpinBox->value());
+    _glview->setData(_sgFilterResult);
+
     statusBar()->showMessage("image ok", 500);
 }
 
@@ -133,6 +108,55 @@ void MainWindow::saveSlot()
     QString filepath = QFileDialog::getSaveFileName(this, "capture filepath", _set.value("capture").toString());
     if (!filepath.isEmpty()) {
         _set.setValue("capture", filepath);
-        _image.save(filepath);
+        if (_tabWidget->currentIndex() == 0)
+            _image.save(filepath);
+        else
+            _glview->grabFrameBuffer().save(filepath);
     }
+}
+
+void MainWindow::setupUI()
+{
+    ui->setupUi(this);
+
+    _label = new QLabel(this);
+    _label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+
+    QScrollArea *scrollArea = new QScrollArea(this);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setBackgroundRole(QPalette::Dark);
+    scrollArea->setWidget(_label);
+
+    _glview = new GLView(this);
+
+    _tabWidget = new QTabWidget(this);
+    _tabWidget->insertTab(0, scrollArea, "flat");
+    _tabWidget->insertTab(1, _glview, "relief");
+    setCentralWidget(_tabWidget);
+
+}
+
+void MainWindow::loadSettings()
+{
+    ui->radioButton->setChecked(_set.value("radio1", true).toBool());
+    ui->radioButton_2->setChecked(!_set.value("radio1", true).toBool());
+    ui->bfDoubleSpinBox->setValue(_set.value("bf", 1.0).toDouble());
+    ui->sgFilterCheckBox->setChecked(_set.value("sg", false).toBool());
+    ui->minValueDoubleSpinBox->setValue(_set.value("min", 0.0).toDouble());
+    ui->maxValueDoubleSpinBox->setValue(_set.value("max", 1.0).toDouble());
+    ui->zScaleDoubleSpinBox->setValue(_set.value("zscale", 0.4).toDouble());
+}
+
+void MainWindow::makeConnexions()
+{
+    connect(ui->actionOpen_images, SIGNAL(triggered()), this, SLOT(openSlot()));
+    connect(ui->actionCapture, SIGNAL(triggered()), this, SLOT(saveSlot()));
+
+    connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(updateAll()));
+    connect(ui->radioButton_2, SIGNAL(clicked()), this, SLOT(updateAll()));
+    connect(ui->bfDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateAll()));
+    connect(ui->sgFilterCheckBox, SIGNAL(clicked()), this, SLOT(updateSG()));
+    connect(ui->minValueDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateIMG()));
+    connect(ui->maxValueDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateIMG()));
+    connect(ui->zScaleDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateIMG()));
 }

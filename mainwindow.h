@@ -30,6 +30,11 @@ private slots:
     void saveSlot();
 
 private:
+    void setupUI();
+    void loadSettings();
+    void makeConnexions();
+
+private:
     Ui::MainWindow *ui;
     QSettings _set;
 

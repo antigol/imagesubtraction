@@ -30,3 +30,7 @@ ICON = icon.xpm
 
 RESOURCES += \
     files.qrc
+
+OTHER_FILES += \
+    render3D.vert \
+    render3D.frag
