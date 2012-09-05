@@ -1,5 +1,6 @@
 #include "glview.h"
 #include <QMouseEvent>
+#include <QMessageBox>
 #include <cmath>
 
 #define BUFFER_OFFSET(a) ((char*)NULL + (a))
@@ -45,12 +46,17 @@ void GLView::setZScale(float zScale)
 
 void GLView::initializeGL()
 {
-    _render3D = new QGLShaderProgram(this);
-    _render3D->addShaderFromSourceFile(QGLShader::Vertex, ":/render3D.vert");
-    _render3D->addShaderFromSourceFile(QGLShader::Fragment, ":/render3D.frag");
-    _render3D->bindAttributeLocation("zvalue", 0);
-    _render3D->bindAttributeLocation("vertex", 1);
-    _render3D->link();
+    if (QGLShaderProgram::hasOpenGLShaderPrograms()) {
+        _render3D = new QGLShaderProgram(this);
+        _render3D->addShaderFromSourceFile(QGLShader::Vertex, ":/render3D.vert");
+        _render3D->addShaderFromSourceFile(QGLShader::Fragment, ":/render3D.frag");
+        _render3D->bindAttributeLocation("zvalue", 0);
+        _render3D->bindAttributeLocation("vertex", 1);
+        _render3D->link();
+    } else {
+        QMessageBox::critical(this, "OpenGL Shader", "OpenGL Shader are not supported !");
+        _render3D = 0;
+    }
 }
 
 void GLView::resizeGL(int w, int h)
@@ -60,6 +66,12 @@ void GLView::resizeGL(int w, int h)
 
 void GLView::paintGL()
 {
+    if (_render3D == 0) {
+        qglClearColor(Qt::red);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        return;
+    }
+
     if (_needUpdateVBO) {
         _needUpdateVBO = false;
         fillVBO();
