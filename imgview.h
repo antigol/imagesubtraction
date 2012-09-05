@@ -14,6 +14,10 @@ signals:
 
 protected:
     virtual void mousePressEvent(QMouseEvent *ev);
+    virtual void mouseMoveEvent(QMouseEvent *ev);
+
+private:
+    void mouseEvent(QMouseEvent *ev);
 };
 
 #endif // IMGVIEW_H

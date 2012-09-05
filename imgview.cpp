@@ -9,7 +9,17 @@ IMGView::IMGView(QWidget *parent) :
 void IMGView::mousePressEvent(QMouseEvent *ev)
 {
     QLabel::mousePressEvent(ev);
+    mouseEvent(ev);
+}
 
+void IMGView::mouseMoveEvent(QMouseEvent *ev)
+{
+    QLabel::mouseMoveEvent(ev);
+    mouseEvent(ev);
+}
+
+void IMGView::mouseEvent(QMouseEvent *ev)
+{
     if (pixmap()) {
         QPoint pos = ev->pos();
         int x = 0;
