@@ -54,8 +54,9 @@ void GLView::initializeGL()
         _render3D->bindAttributeLocation("vertex", 1);
         _render3D->link();
     } else {
-        QMessageBox::critical(this, "OpenGL Shader", "OpenGL Shader are not supported !");
+        QMessageBox::critical(this, "OpenGL Shader", "OpenGL Shader are not supported on this computer !");
         _render3D = 0;
+        emit shaderUnsupported();
     }
 }
 

@@ -23,6 +23,7 @@ public:
 
 private slots:
     void clickedOnImg(int x, int y);
+    void disableGLView();
 
     void updateAll();
     void updateSG();

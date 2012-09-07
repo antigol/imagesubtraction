@@ -18,6 +18,9 @@ public:
     void setMinMax(float min, float max);
     void setZScale(float zScale);
 
+signals:
+    void shaderUnsupported();
+
 private:
     void initializeGL();
     void resizeGL(int w, int h);

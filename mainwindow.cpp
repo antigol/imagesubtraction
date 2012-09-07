@@ -40,6 +40,11 @@ void MainWindow::clickedOnImg(int x, int y)
     ui->bfDoubleSpinBox->setValue(_foreground.pixel(x, y) / _background.pixel(x, y));
 }
 
+void MainWindow::disableGLView()
+{
+    _tabWidget->setTabEnabled(1, false);
+}
+
 void MainWindow::updateAll()
 {
     if (_foreground.width * _foreground.height * _background.width * _background.height == 0) {
@@ -167,4 +172,6 @@ void MainWindow::makeConnexions()
     connect(ui->minValueDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateIMG()));
     connect(ui->maxValueDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateIMG()));
     connect(ui->zScaleDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(updateIMG()));
+
+    connect(_glview, SIGNAL(shaderUnsupported()), this, SLOT(disableGLView()));
 }
